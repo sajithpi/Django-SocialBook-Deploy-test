@@ -1,1 +1,1 @@
-# Django-SocialBook-Deploy-test
+# Django-SocialBook-Deploy-test-aws
