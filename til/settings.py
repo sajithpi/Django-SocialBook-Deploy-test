@@ -32,8 +32,8 @@ PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'django-insecure-@l$m-3e0m(1*g86-_$xtv$oaw#^2jg4x8(^1tsa68!_!m8jf9%'
 # SECURITY WARNING: don't run with debug turned on in production!
 # DEBUG = config('DEBUG', default=True, cast=bool)
-DEBUG = False
-ALLOWED_HOSTS = ['127.0.0.1','socilbook7.herokuapp.com']
+DEBUG = True
+ALLOWED_HOSTS = ['socilbook7.herokuapp.com','127.0.0.1']
 
 
 
