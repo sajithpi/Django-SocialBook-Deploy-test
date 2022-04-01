@@ -14,7 +14,7 @@ from ctypes import cast
 from email.policy import default
 import os
 from pathlib import Path
-
+import django_heroku
 
 from decouple import config
 
@@ -31,8 +31,8 @@ PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = config('DEBUG', default=True, cast=bool)
-
+# DEBUG = config('DEBUG', default=True, cast=bool)
+DEBUG = False
 ALLOWED_HOSTS = []
 
 #Media Root
@@ -238,3 +238,5 @@ STATIC_URL = "/static/"
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+# Activate Django-Heroku.
+django_heroku.settings(locals())
