@@ -122,22 +122,22 @@ CHANNEL_LAYERS = {
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'DEMO_1',
-        'USER': 'sajithviolin',
-        'PASSWORD':'saji1593',
-        'HOST':'database-1.cxusjm1xggcy.us-east-1.rds.amazonaws.com',
-        'PORT':'54325'
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'DEMO_1',
+#         'USER': 'sajithviolin',
+#         'PASSWORD':'saji1593',
+#         'HOST':'database-1.cxusjm1xggcy.us-east-1.rds.amazonaws.com',
+#         'PORT':'54325'
+#     }
+# }
 
 
 # Password validation
@@ -211,14 +211,14 @@ EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 
 #S3 BUCKETS CONFIG
 
-AWS_ACCESS_KEY_ID = 'AKIA5DEZS7WGG7M72H4E'
-AWS_SECRET_ACCESS_KEY = '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'
-AWS_STORAGE_BUCKET_NAME = 'sajithviolin-bucket'
-AWS_S3_FILE_OVERWRITE = False
-AWS_DEFAULT_ACL = None
-DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-
+# AWS_ACCESS_KEY_ID = 'AKIA5DEZS7WGG7M72H4E'
+# AWS_SECRET_ACCESS_KEY = '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'
+# AWS_STORAGE_BUCKET_NAME = 'sajithviolin-bucket'
+# AWS_S3_FILE_OVERWRITE = False
+# AWS_DEFAULT_ACL = None
+# DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+# STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 # Static Files
 
 STATICFILES_DIRS = [
