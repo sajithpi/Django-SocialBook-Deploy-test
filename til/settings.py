@@ -35,10 +35,6 @@ DEBUG = config('DEBUG', default=True, cast=bool)
 
 ALLOWED_HOSTS = ['127.0.0.1','socialbook79.herokuapp.com']
 
-#Media Root
-
-MEDIA_URL = "frontend/media/"
-MEDIA_ROOT =  os.path.join(PROJECT_DIR,"frontend/media")
 
 
 # Application definition
@@ -228,9 +224,13 @@ STATICFILES_DIRS = [
     os.path.join(PROJECT_DIR,"frontend/")
 ]
 
-STATIC_ROOT = os.path.join(BASE_DIR,"staticfiles")
+STATIC_ROOT = os.path.join(PROJECT_DIR,"staticfiles")
 STATIC_URL = "/frontend/"
 
+#Media Root
+
+MEDIA_URL = "frontend/media/"
+MEDIA_ROOT =  os.path.join(PROJECT_DIR,"frontend/media")
 
 
 # EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
