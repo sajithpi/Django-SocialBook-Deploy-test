@@ -10,7 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
-
+from ctypes import cast
 from email.policy import default
 import os
 from pathlib import Path
@@ -28,13 +28,17 @@ PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-# SECRET_KEY = config('SECRET_KEY')
-SECRET_KEY = 'django-insecure-@l$m-3e0m(1*g86-_$xtv$oaw#^2jg4x8(^1tsa68!_!m8jf9%'
-# SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = config('DEBUG', default=True, cast=bool)
-DEBUG = True
-ALLOWED_HOSTS = ['socilbook7.herokuapp.com','127.0.0.1']
+SECRET_KEY = config('SECRET_KEY')
 
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = config('DEBUG', default=True, cast=bool)
+
+ALLOWED_HOSTS = []
+
+#Media Root
+
+MEDIA_URL = "frontend/media/"
+MEDIA_ROOT =  os.path.join(PROJECT_DIR,"frontend/media")
 
 
 # Application definition
@@ -73,7 +77,7 @@ MIDDLEWARE = [
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'django_session_timeout.middleware.SessionTimeoutMiddleware',
+     'django_session_timeout.middleware.SessionTimeoutMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -122,22 +126,22 @@ CHANNEL_LAYERS = {
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
 # DATABASES = {
 #     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'DEMO_1',
-#         'USER': 'sajithviolin',
-#         'PASSWORD':'saji1593',
-#         'HOST':'database-1.cxusjm1xggcy.us-east-1.rds.amazonaws.com',
-#         'PORT':'54325'
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
 #     }
 # }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'DEMO_1',
+        'USER': 'sajithviolin',
+        'PASSWORD':'saji1593',
+        'HOST':'database-1.cxusjm1xggcy.us-east-1.rds.amazonaws.com',
+        'PORT':'54325'
+    }
+}
 
 
 # Password validation
@@ -208,30 +212,25 @@ EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 
 
 
-
 #S3 BUCKETS CONFIG
 
-# AWS_ACCESS_KEY_ID = 'AKIA5DEZS7WGG7M72H4E'
-# AWS_SECRET_ACCESS_KEY = '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'
-# AWS_STORAGE_BUCKET_NAME = 'sajithviolin-bucket'
-# AWS_S3_FILE_OVERWRITE = False
-# AWS_DEFAULT_ACL = None
-# DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-# STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+AWS_ACCESS_KEY_ID = 'AKIA5DEZS7WGG7M72H4E'
+AWS_SECRET_ACCESS_KEY = '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'
+AWS_STORAGE_BUCKET_NAME = 'sajithviolin-bucket'
+AWS_S3_FILE_OVERWRITE = False
+AWS_DEFAULT_ACL = None
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
 # Static Files
 
 STATICFILES_DIRS = [
     os.path.join(PROJECT_DIR,"frontend/")
 ]
 
-STATIC_ROOT = os.path.join(PROJECT_DIR,"staticfiles")
-STATIC_URL = "/frontend/"
+STATIC_ROOT = os.path.join(BASE_DIR,"static")
+STATIC_URL = "/static/"
 
-#Media Root
-
-MEDIA_URL = "frontend/media/"
-MEDIA_ROOT =  os.path.join(PROJECT_DIR,"frontend/media")
 
 
 # EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
@@ -239,6 +238,3 @@ MEDIA_ROOT =  os.path.join(PROJECT_DIR,"frontend/media")
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-# Configure Django App for Heroku.
-import django_on_heroku
-django_on_heroku.settings(locals())
