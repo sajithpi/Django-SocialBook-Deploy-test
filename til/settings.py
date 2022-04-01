@@ -10,7 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
-from ctypes import cast
+
 from email.policy import default
 import os
 from pathlib import Path
@@ -29,7 +29,7 @@ PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # SECURITY WARNING: keep the secret key used in production secret!
 # SECRET_KEY = config('SECRET_KEY')
-SECRET_KEY = django-insecure-@l$m-3e0m(1*g86-_$xtv$oaw#^2jg4x8(^1tsa68!_!m8jf9%
+SECRET_KEY = 'django-insecure-@l$m-3e0m(1*g86-_$xtv$oaw#^2jg4x8(^1tsa68!_!m8jf9%'
 # SECURITY WARNING: don't run with debug turned on in production!
 # DEBUG = config('DEBUG', default=True, cast=bool)
 DEBUG = False
