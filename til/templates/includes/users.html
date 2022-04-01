@@ -1,0 +1,69 @@
+{% load thumbnail %}
+
+
+{% if request.user != user.user %}
+<div class="mx-auto flex max-w-7xl  bg-transparent rounded-lg items-center relative "
+	x-data="{
+        comment : false,
+    }">
+
+
+    <div class="flex flex-col   shadow-md hover:shodow-lg rounded-2xl w-full h-full ">
+        <div class="flex items-center justify-between">
+            <div class="flex items-center mx-1 md:mx-3">
+                <!-- <div class="flex w-16 md:w-24 h-16 md:h-auto items-center ml-1 md:ml-5 ">
+                    <a href="{% url 'profiles:user_profile' user.user.username %}" class="object-scale-down ">
+                      
+                        <img src="{{ user.image.url }}"
+                            class="rounded-lg object-scale-down h-14 rounded-full border-solid border-2">
+                      
+                    </a>
+                </div> -->
+                <button class="flex  items-center ml-1 md:ml-5">
+                    <a  href="{% url 'profiles:user_profile' user.user.username %}">
+                  
+                      {% thumbnail user.image "31x31" crop="center" as img %}
+                        <img  src="{{ img.url }}"class="object-scale-down rounded-full border-solid border-white border-2">
+                      {% endthumbnail %}
+                 
+                    </a>
+                  </button>
+                <div class="flex flex-col ml-3">
+                    <div class=" text-sm mt-3 font-semibold">{{user.user}}</div>
+
+                    <span class="text-xs text-gray-400">
+                
+                        {% if user.country %}
+                            {{user.country}},
+                        {% else %}
+                            Country,
+                        {% endif %}
+                        
+                        {% if user.state %}
+                            {{user.state}},
+                        {% else %}
+                            State,
+                        {% endif %}
+                            
+                        {% if user.place %}
+                            {{user.place}}
+                        {% else %}
+                            City
+                        {% endif %}
+                            
+                    </span>
+                        
+                </div>
+            </div>
+            <div class="mx-4 md:mx-1 bg-blue-100 hover:bg-blue-200 rounded border-b-2 shadow-md ">
+
+                    <button  class="flex  text-gray-800 font-bold px-0 text-xs inline-flex items-center ">
+                        <a href="{% url 'chat:room' user.user %}" class="flex items-center">
+                            <i class='bi bi-chat-left-dots text-blue-700 text-sm px-1'></i>
+                        </a>
+                    </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}

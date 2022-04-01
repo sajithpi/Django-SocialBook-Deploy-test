@@ -1,0 +1,116 @@
+<!-- chat/templates/chat/index.html -->
+{% extends 'base.html' %}
+{% load static %}
+{% load thumbnail %}
+
+
+{% block body %}
+    
+
+    <!-- TODO:Navbar -->
+    <div class="fixed top-0 left-0 right-0 z-40 ">
+        {% include 'includes/navbar.html' %}
+      </div>
+
+    <div class="py-10 h-screen px-2 mt-20">
+        <div class="max-w-md mx-auto bg-gray-50 shadow-lg rounded-lg overflow-hidden md:max-w-lg">
+            <div class="md:flex">
+                <div class="w-full p-4">
+                     <div id="search_room" class="mt-2 w-min">
+                            <div class="text-sm md:text-lg font-semibold my-0.5 md:my-1 mx-0.5 md:mx-2">Messages</div>
+                        </div>
+                    <!-- TODO:Displaying ChatList -->
+                    {% if chats %}
+                        <ul>
+                            {% for room in rooms.all %}
+                            <li class="flex justify-between items-center shadow-md  mt-2 p-2 bg-gray-50 hover:bg-gray-200 hover:shadow-lg rounded cursor-pointer transition">
+                                <div class="flex ml-2 items-center w-full"> 
+                                    <!-- <img src="https://i.imgur.com/aq39RMA.jpg" width="40" height="40" class="rounded-full"> -->
+                                    <!-- TODO:User image -->
+                                    {% if request.user.username == room.sender %}
+                                    <a href="{% url 'profiles:user_profile' room.receiver %}" class="object-scale-down ">
+                                        {% thumbnail room.receiver_profile.profile.image "45x45" crop="center" as img%}
+                                        <img src="{{ img.url }}"
+                                            class="object-scale-down rounded-full border-solid border-white border-2 ">
+                                        {% endthumbnail %}
+        
+                                    </a>
+                                    {% else %}
+                                    <a href="{% url 'profiles:user_profile' room.sender %}" class="object-scale-down ">
+                                        {% thumbnail room.sender_profile.profile.image "45x45" crop="center" as img %}
+                                        <img src="{{ img.url }}"
+                                            class="object-scale-down rounded-full border-solid border-white border-2">
+                                        {% endthumbnail %}
+        
+                                    </a>
+                                    {% endif %}
+                                    <div class="flex flex-col ml-2 w-full"> 
+                                        <!-- <span class="font-medium text-black">Jessica Koel</span>  -->
+                                        <!-- TODO:Username -->
+                                        {% if request.user.username == room.sender %}
+                                            <a href="{% url 'chat:room' room.receiver %}" class="text-decoration-none">
+                                                <div class="text-xs  md:text-sm font-semibold overflow-hidden text-gray-700">
+                                                    {{room.receiver |capfirst }}</div>
+                                            </a>
+                                        {% else %}
+                                            <a href="{% url 'chat:room' room.sender %}" class="">
+                                                <div class="text-xs md:text-sm font-semibold">{{room.sender |capfirst }}</div>
+                                            </a>
+                                        {% endif %}
+                                            <!-- <span class="text-sm text-gray-400 truncate w-32">Hey, Joel, I here to help you out please tell me</span>  -->
+                                        <!-- TODO: Chats Message -->
+                                        {% for chat in chats %}
+    
+                                {% if chat.content  %}
+    
+                                {% if chat.room.id == room.id %}
+                                {% if chat.is_read == False %}
+                                {% if chat.sender == request.user %}
+                                <span
+                                    class="text-sm text-gray-400 truncate w-32">{{chat.sender | capfirst}}:{{chat.content}}</span>
+                                {% else %}
+                                <div
+                                    class="text-sm text-gray-400 truncate w-32">{{chat.sender | capfirst}}:<span
+                                    class="text-sm font-bold truncate">{{chat.content}}</span></div>
+                                {% endif %}
+                                {% else %}
+                                <div class="text-sm text-gray-400 truncate w-32">{{chat.sender | capfirst}}
+                                    : {{chat.content}}</div>
+                                {% endif %}
+                                {% endif %}
+                                {% endif %}
+    
+                                {% endfor %}
+
+                                    </div>
+                                </div>
+                                <!-- TODO: Message Time -->
+                                {% for chat in chats  %}
+                                {% if chat.room.id == room.id %}
+                                <div class="flex flex-col my-3 ">
+                                    <span class="text-xs text-gray-400 ">{{chat.timestamp | date:"g:i:a"}}</span>
+        
+        
+                                </div>
+                                {% endif %}
+                                {% endfor %}
+                            </li>
+                            {% endfor %}
+                        </ul>
+                        <!-- TODO:If ChatLists are Empty -->
+                    {% else %}
+                        <ul>
+                            <li class="flex justify-between items-center bg-white mt-2 p-2 hover:shadow-lg rounded cursor-pointer transition">
+                    
+                                        <div class="text-xs md:text-base text-neutral-500 mb-1 md:mb-2">Chat List is Empty</div>
+                                        <div class="text-xs md:text-base ">Start Messaging With Your Friends</div>
+                                        <div class="text-lg md:text-4xl text-blue-500 text-center"><i class='bx bx-paper-plane'></i></div>
+                    
+                            </li>
+                        </ul>
+                        {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock body %}

@@ -1,0 +1,159 @@
+<!-- chat/templates/chat/index.html -->
+{% load static %}
+{% load thumbnail %}
+
+<html>
+<body>
+    <div id="search_room" class="mt-2 text-xs md:text-lg font-semibold my-0 md:my-1 ml-2 md:ml-4">
+        Messages
+    </div>
+    {% if chats %}
+    <div class="w-full overflow-y-scroll">
+        <div
+            class="flex justify-between items-center m-0.5 md:m-2">
+    
+            <label for="search" class="sr-only text-xs md:text-sm">Search</label>
+            <div class="w-28 sm:w-full  bg-white border rounded-lg md:rounded-full flex justify-between items-center relative mx-1 pl-3  pr-2">
+                <input hidden id="room_url" type="text" value="{% url 'feed:search_room' %}">
+                <input type="search" name="keyword" id="room-name-input" placeholder="Search"
+                    class="text-xs md:text-base w-full outline-none focus:outline-none active:outline-none  "/>
+              <button id="room-name-submit" type="button"
+                class=" outline-none focus:outline-none active:outline-none self-center">
+                <div class="items-center mt-1 ">
+                    <i class='bx bx-search-alt-2 text-base md:text-xl'></i>
+                </div>
+            </button>
+           
+          </div>
+        </div>
+    
+        {% for room in rooms.all %}
+
+
+
+        <div class="mx-auto flex  items-center relative h-auto" x-data="{
+                            comment : false,
+                        }">
+
+
+            <div
+                class="flex flex-col shadow-md mt-2 py-2 hover:shadow-lg rounded cursor-pointer transition w-full h-full p-0  border bg-gray-50 hover:bg-gray-100 rounded-lg overflow-hidden my-0.5 md:my-1 mx-0.5">
+                <div class="flex items-center justify-between self-center ml-1  md:ml-3">
+                    <div class="flex items-center mx-0 md:mx-3">
+                        <div class="flex w-7 h-7 md:w-10 md:h-10 items-center mx-0 md:mx-1">
+
+                            {% if request.user.username == room.sender %}
+                            <a href="{% url 'profiles:user_profile' room.receiver %}" class="object-scale-down ">
+                                {% thumbnail room.receiver_profile.profile.image "51x51" crop="center" as img%}
+                                <img src="{{ img.url }}"
+                                    class="object-scale-down rounded-full border-solid border-white border-2 ">
+                                {% endthumbnail %}
+
+                            </a>
+                            {% else %}
+                            <a href="{% url 'profiles:user_profile' room.sender %}" class="object-scale-down ">
+                                {% thumbnail room.sender_profile.profile.image "51x51" crop="center" as img %}
+                                <img src="{{ img.url }}"
+                                    class="object-scale-down rounded-full border-solid border-white border-2">
+                                {% endthumbnail %}
+
+                            </a>
+                            {% endif %}
+
+                        </div>
+                     
+                        <div class="hidden md:flex flex-col w-24 md:w-20 lg:w-40  mx-0.5">
+                            {% if request.user.username == room.sender %}
+                            <a href="{% url 'chat:room' room.receiver %}" class="stretched-link text-decoration-none">
+                                <div class="text-xs  md:text-sm font-semibold overflow-hidden text-gray-700">
+                                    {{room.receiver |capfirst }}</div>
+                            </a>
+                            {% else %}
+                            <a href="{% url 'chat:room' room.sender %}" class="stretched-link">
+                                <div class="text-xs md:text-sm font-semibold">{{room.sender |capfirst }}</div>
+                            </a>
+                            {% endif %}
+
+
+                            {% for chat in chats %}
+
+                            {% if chat.content  %}
+
+                            {% if chat.room.id == room.id %}
+                            {% if chat.is_read == False %}
+                            {% if chat.sender == request.user %}
+                            <span
+                                class="text-xs text-gray-600 truncate">{{chat.sender | capfirst}}:{{chat.content}}</span>
+                            {% else %}
+                            <div
+                                class="text-xs md:text-sm text-gray-600 truncate">{{chat.sender | capfirst}}:<span
+                                class="text-xs lg:text-sm font-bold truncate">{{chat.content}}</span></div>
+                            {% endif %}
+                            {% else %}
+                            <div class="text-xs text-gray-600 truncate">{{chat.sender | capfirst}}
+                                : {{chat.content}}</div>
+                            {% endif %}
+                            {% endif %}
+                            {% endif %}
+
+                            {% endfor %}
+
+                        </div>
+
+                        {% for chat in chats  %}
+                        {% if chat.room.id == room.id %}
+                        <div class="hidden md:flex flex-col my-3 ">
+                            <small class="text-xs text-gray-400 ">{{chat.timestamp | date:"g:i:a"}}</small>
+
+
+                        </div>
+                        {% endif %}
+                        {% endfor %}
+
+
+                    </div>
+                </div>
+                <!-- TODO:It will display in mobile devices, it will change the appearence of chatrooms in mobile devices -->
+                <div class="block md:hidden flex-col w-auto ml-0 md:ml-2 text-center">
+                    {% if request.user.username == room.sender %}
+                    <a href="{% url 'chat:room' room.receiver %}" class="stretched-link text-decoration-none">
+                        <div class="block text-xs  md:text-sm font-semibold overflow-hidden text-gray-700 truncate">
+                            {{room.receiver |capfirst }}</div>
+                    </a>
+                    {% else %}
+                    <a href="{% url 'chat:room' room.sender %}" class="stretched-link">
+                        <div class="text-xs md:text-sm font-semibold block  truncate"><small>{{room.sender |capfirst }}</small></div>
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+            <hr>
+        </div>
+
+
+
+        {% endfor %}
+
+
+
+    </div>
+
+    {% else %}
+
+    <div class="py-10 h-screen bg-gray-300 px-2">
+        <div class="max-w-md mx-auto bg-gray-100 shadow-lg rounded-lg overflow-hidden w-full">
+            <div class="md:flex">
+                <div class="w-full p-1 md:p-4 bg-gray-300">
+
+                    <div class="text-xs md:text-base text-neutral-500 mb-1 md:mb-2">Chat List is Empty</div>
+                    <div class="text-xs md:text-base ">Start Messaging With Your Friends</div>
+                    <div class="text-lg md:text-4xl text-blue-500 text-center"><i class='bx bx-paper-plane'></i></div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</body>
+
+</html>
