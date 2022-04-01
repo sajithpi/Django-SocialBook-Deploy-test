@@ -1,0 +1,107 @@
+<!-- component -->
+<!-- Facebook notification -->
+<style>
+        .text-blue {
+            color: #1876f2;
+        }
+    </style>
+{% load thumbnail %}
+<div class="text-end pr-4 bg-gray-100">
+
+</div>
+
+{% if notifications %}
+
+
+
+    
+<div class="overflow-y-scroll max-h-96">
+
+    
+    <div class="flex w-full justify-between">
+
+        <button id="notification_clear" data-notification-clear-url="{% url 'feed:notification_clear' %}" class="text-xs md:text-sm font-semibold text-blue-700">Clear All</button>
+        <button @click="dropdownOpen = !dropdownOpen"  class="bg-slate-100 p-1 mr-4">
+            <i class="bi bi-x-circle text-blue-500"></i>
+        </button>
+    </div>
+    
+    {% for notification in notifications %}
+        
+        {% if notification.notification_type == 1 or notification.notification_type == 2 or notification.notification_type == 3  %}
+        
+            {% if notification.from_user is not notification.to_user %}
+                    
+                <div class="bg-gray-100  pl-1 md:pl-4 py-1 rounded-lg shadow-md max-w-md border-b notification_list">
+                  
+                    <div class="flex items-center  hover:bg-gray-100 rounded-lg  py-1 cursor-pointer">
+                        {% if notification.post %}
+
+                        
+                                    <div class="rounded-full p-0.5  bg-gradient-to-b from-blue-400 via-green-500 to-indigo-700 ">
+                                        <div class="rounded-full wrapper overflow-hidden h-9 w-9">
+                                          <button>
+                                            <a href="{% url 'feed:user_profile_notification' notification.pk notification.from_user.id %}">
+                  
+                                            {% thumbnail notification.from_user.profile.image "39x39" crop="center" as im %}
+                                                <img src="{{ im.url }}" class="object-scale-down rounded-full border-solid border-white border-2">
+                                              {% endthumbnail %}
+                                              
+                                            </a>
+                                           
+                                          </button>
+                                        </div>
+                                        
+                                      </div>
+
+                                    <div class="ml-3">
+                                    
+                                        {% if notification.notification_type == 1 %}
+                                            <p class="text-xs md:text-sm m-auto "><span class="font-bold">{{notification.from_user | capfirst }}</span> Liked on your post</p>
+                                        {% elif notification.notification_type == 2%}
+                                            <p class="text-xs md:text-sm m-auto"><span class="font-bold">{{notification.from_user | capfirst }}</span> Commented on your post</p>
+                    
+                                        {% endif %}
+                                    </div>
+                                    <div class="flex flex-shrink-0 px-3 w-20 md:w-auto">
+                                        <a href="{% url 'feed:post_notification' notification.pk  notification.post.pk %}">
+                                        {% thumbnail notification.post.photo "59x59" crop="center" as im %}
+                                                                    <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}"
+                                                                        class="object-scale-down">
+                                        {% endthumbnail %}
+                                        </a>
+                                    </div>
+                    
+                    
+                        
+                        {% elif notification.notification_type == 3 %}
+                            
+                            <div class="flex flex-shrink-0 items-end">
+                                <a href="{% url 'feed:user_profile_notification' notification.pk notification.from_user.id %}">
+                                {% thumbnail notification.from_user.profile.image "39x39" crop="center" as im %}
+                                                            <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}"
+                                                                class="rounded-full object-scale-down">
+                                {% endthumbnail %}
+                                </a>
+                            </div>
+                            <div class="m-auto pl-2">
+                                <p class="text-xs md:text-sm m-auto"><span class="font-bold">{{notification.from_user | capfirst}}</span> Started Following You </p>
+                                <!-- <small class="text-xs text-gray-500 font-semibold h-0.5">{{notification.date | timesince }} a few seconds ago</small>  -->
+                            </div>   
+                            <div class="flex flex-shrink-0 px-2 bg-white border-2 mr-1 md:mr-4">
+                            
+                                <span class="text-xs md:text-sm text-black font-semibold">Following</span> 
+                            </div>   
+                        {% endif %}
+                            
+                    
+                    </div>
+                    <div class="text-left"><small class="text-xs text-gray-500 font-semibold h-0.5">{{notification.date | timesince }} a few seconds ago</small> </div>
+                </div>   
+            {% endif %}
+        {% endif %}
+            
+    {% endfor %}
+    
+</div>
+{% endif %}

@@ -1,0 +1,158 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load thumbnail %}
+homepage 
+
+{% block title %}
+    Home page
+{% endblock title %}
+
+<h1 class="text-3xl py-3 text-blue-500">Welcome {{user.username}}</h1>
+
+{% block body %}
+
+    {% if request.user.is_authenticated %}
+    <!-- TODO:Navbar -->
+      <div class="fixed top-0 left-0 right-0 z-40 ">
+        {% include 'includes/navbar.html' %}
+      </div>
+      <div class="flex mt-20 z-20  w-3/4">
+        <div  class="mx-0.5  lg:mx-12">
+        
+    <!--TODO: Stories -->
+
+          <div class="flex stories pl-1 md:pl-5 py-1 bg-white shadow-lg rounded flex  ">
+            <!-- TODO:Your story -->
+            <div class="storie-item flex flex-col  mr-1 md:mr-6 flex flex-col items-center justify-end relative">
+                  <div class="rounded-full p-0.5 bg-gradient-to-b from-blue-700 via-indigo-400 to-indigo-700  ">
+                    <div class="rounded-full bg-white wrapper overflow-hidden h-7 w-7 md:h-12 md:w-12 ">
+                      <button>
+                        
+                        {% if user_story %}
+                          <a class="story-icon" id={{user_story.id}}>
+                        {% else %}
+                        <a class="js-story-icon" id={{user_story.id}}>
+                        {% endif %}
+                          
+                       
+                      
+                          {% thumbnail user.profile.image "51x51" crop="center" as img %}
+                            <img id="story-icon{{story.id}}" src="{{ img.url }}"class="object-scale-down rounded-full border-solid border-white border-2">
+                          {% endthumbnail %}
+                          <input  hidden id="request-user-name" type="text" value="{{request.user.username}}">
+                          {% if request.user == user_story.author %}
+                         
+                          <input  hidden id="story-author-name{{user_story.id}}" type="text" value="{{user.username}}">
+                          <input  hidden id="story-author-img{{user_story.id}}" type="text" value="{{user.profile.image.url}}">
+                      {% endif %}
+                        </a>
+                      </button>
+                    </div>
+                      <button class="js-story-icon absolute bottom-8 right-1 bg-purple-800 rounded-full h-4 w-4 md:h-5 md:w-5 text-sm md:text-2xl
+                                      text-white font-semibold border-2 border-white flex justify-center items-center font-mono hover:bg-blue-700">
+                       +
+                      </button>
+                     
+                    </div>
+                    <div class="w-max user-name text-center text-gray-700 text-xs md:text-base">
+                      <small>Your Story</small>
+                  </div>
+                  </div>
+              {% if stories %}
+                  
+                  {% for story in stories %}
+                  {% if story.author != request.user %}
+                      {% ifchanged  story.author %}
+                        <div class="storie-item flex flex-col mr-1 md:mr-6 flex flex-col items-center justify-end relative">
+                          <div class="rounded-full p-0.5 md:p-1 bg-gradient-to-b from-blue-400 via-green-500 to-indigo-700 ">
+                            <div class="rounded-full bg-white wrapper overflow-hidden h-7 w-7 md:h-12 md:w-12 ">
+                              <button>
+                                <a class="story-icon" id={{story.id}}>
+                              
+                                  {% thumbnail story.author.profile.image "51x51" crop="center" as img %}
+                                    <img id="story-icon{{story.id}}" src="{{ img.url }}"class="object-scale-down rounded-full border-solid border-white border-2">
+                                  {% endthumbnail %}
+                              
+                                  
+                             
+                                    
+                                      <input  hidden id="story-author-name{{story.id}}" type="text" value="{{story.author.username}}">
+                                      <input  hidden id="story-author-img{{story.id}}" type="text" value="{{story.author.profile.image.url}}">
+                              
+                             
+                                </a>
+                              </button>
+                            </div>
+                          </div>
+                        
+                        
+
+                              <div class="user-name text-center text-gray-700 text-xs md:text-base">
+                          
+                                 
+                                  <small>{{story.author}}</small>
+                                    
+  
+                              </div>
+                         
+                        </div>
+                      {% endifchanged %}
+                      {% endif %}
+                  {% endfor %}
+             
+                
+                    
+                    
+              {% endif %}
+  
+				  </div>
+          <!-- TODO:Post Section -->
+          <div id="posts-container" class="">
+            {% if posts %}
+              {% for post in posts  %}
+                  
+                        {% include 'includes/post.html' with post=post  comment_form=comment_form profile=profile show_detail_link=True show_comment_list=False favorites=favorites%}
+        
+              {% endfor %}
+            {% else %}
+              <div class="">
+                <span class="text-sm md:text-lg font-bold ">No Posts For you</span>
+                <div class="mx-auto text-sm md:text-base">Do you like to post something?</div>
+                <button
+                      class="flex-shrink-0 pr-0.5 md:pr-4 border-transparent text-gray-700 rounded-full hover:text-gray-600 focus:outline-none "
+                      aria-label="Notifications">
+                          <a href="{% url 'feed:new_post' %}"
+                          class="js-model-icon flex flex-col md:flex-row items-center h-12 text-gray-500 hover:text-gray-800 ">
+                          <span class="inline-flex items-center content-start md:content-center  h-12 w-7  text-gray-400"><i
+                              class="bx bx-message-alt-add text-indigo-500 text-xl md:text-2xl"></i></span>
+                      
+                          </a>
+                </button>
+              </div>
+            {% endif %}
+        </div>
+      </div>
+      
+
+    </div> 
+    <!-- TODO:Chat List Section -->
+    <div class="block px-0 md:px-3 border-2 max-h-screen fixed top-16 right-0 bg-white shadow-lg w-1/5 md:w-1/4">
+       
+      {% include 'chat/index.html' with rooms=rooms chats=chats room_users=room_users%}
+    </div>
+  {% else %}
+    {% include 'account/login.html' %}
+
+   
+  {% endif %}
+  
+
+
+  
+    
+
+  
+{% endblock body %}
+
+    
+    
